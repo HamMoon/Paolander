@@ -78,11 +78,64 @@
     text-shadow: 0 0 10px rgba(150,180,255,0.5);
   }
 
+  #avion {
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    width: 130px;
+    height: auto;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));
+  }
+
+  #countdown {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    text-align: center;
+    color: #e8f0ff;
+  }
+
+  #countdown-label {
+    font-size: 16px;
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px rgba(150,180,255,0.5);
+    margin-bottom: 6px;
+  }
+
+  #countdown-timer {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+  }
+
+  .cd-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cd-value {
+    font-size: 22px;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(150,180,255,0.6);
+  }
+
+  .cd-unit {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #aab4d0;
+    margin-top: 2px;
+  }
+
   #bubble {
     position: absolute;
-    top: -10px;
-    right: -70px;
-    width: 64px;
+    top: 10px;
+    left: -46px;
+    width: 56px;
     height: auto;
     opacity: 0;
     transform: translateY(6px) scale(0.9);
@@ -123,12 +176,36 @@
 <div id="page-1">
   <div id="bg-gif"></div>
 
+  <div id="countdown">
+    <div id="countdown-label">REENCUENTRO</div>
+    <div id="countdown-timer">
+      <div class="cd-block">
+        <span class="cd-value" id="cd-days">--</span>
+        <span class="cd-unit">DÍAS</span>
+      </div>
+      <div class="cd-block">
+        <span class="cd-value" id="cd-hours">--</span>
+        <span class="cd-unit">HORAS</span>
+      </div>
+      <div class="cd-block">
+        <span class="cd-value" id="cd-minutes">--</span>
+        <span class="cd-unit">MIN</span>
+      </div>
+      <div class="cd-block">
+        <span class="cd-value" id="cd-seconds">--</span>
+        <span class="cd-unit">SEG</span>
+      </div>
+    </div>
+  </div>
+
+  <img id="avion" src="assets/avion.png" alt="Avión pixel art">
+
   <div id="avatar-wrap">
     <div id="avatar-box">
       <img id="avatar" src="assets/avatar.png" alt="Avatar Paohan">
       <img id="bubble" src="" alt="">
     </div>
-    <div id="title">PAOHAN</div>
+    <div id="title">PAOLA Y HANDER</div>
   </div>
 
   <button id="sound-btn">🔇 Love Me Again</button>

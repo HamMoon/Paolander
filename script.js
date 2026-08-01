@@ -22,30 +22,30 @@ const AudioManager = {
     this.audio.volume = 0.5;
     this.audio.preload = 'auto';
 
-    // Intenta desbloquear en el primer toque/click en cualquier
-    // parte de la página (requisito de políticas de autoplay).
+    // En el primer toque/click/tecla en cualquier parte de la página,
+    // arrancamos la reproducción real (requisito de autoplay en móviles:
+    // debe ocurrir dentro del mismo gesto del usuario).
     const unlockEvents = ['touchstart', 'click', 'keydown'];
-    const unlockHandler = () => this.unlock();
+    const unlockHandler = () => this.playFromGesture();
     unlockEvents.forEach(evt => {
       document.addEventListener(evt, unlockHandler, { once: true });
     });
 
-    this.soundBtn.addEventListener('click', () => this.toggle());
+    this.soundBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // evita que este mismo click dispare el unlock genérico dos veces
+      this.toggle();
+    });
   },
 
-  unlock() {
+  playFromGesture() {
     if (this.unlocked || !this.audio) return;
-    // Reproduce y pausa inmediatamente: truco estándar para
-    // "desbloquear" el audio en móviles sin sonido audible.
     this.audio.play()
       .then(() => {
-        this.audio.pause();
-        this.audio.currentTime = 0;
         this.unlocked = true;
+        this.soundBtn.textContent = '🔊 Love Me Again';
       })
       .catch(() => {
-        // Si falla, el usuario deberá activar el sonido manualmente
-        // con el botón — no rompe la experiencia.
+        // Si el navegador lo bloquea igual, queda disponible el botón manual.
       });
   },
 
@@ -108,3 +108,53 @@ const BubbleManager = {
 };
 
 BubbleManager.start();
+
+
+/* ---------- 3. COUNTDOWN (Reencuentro) ----------
+   Cuenta regresiva en días, horas y minutos hasta
+   el 28 de septiembre de este año.
+------------------------------------------------------- */
+
+const CountdownManager = {
+  targetDate: new Date('2026-09-28T00:00:00'),
+  elDays: document.getElementById('cd-days'),
+  elHours: document.getElementById('cd-hours'),
+  elMinutes: document.getElementById('cd-minutes'),
+  elSeconds: document.getElementById('cd-seconds'),
+
+  start() {
+    this.update();
+    setInterval(() => this.update(), 1000); // se actualiza cada segundo
+  },
+
+  update() {
+    const now = new Date();
+    let diff = this.targetDate - now;
+
+    if (diff <= 0) {
+      this.elDays.textContent = '0';
+      this.elHours.textContent = '0';
+      this.elMinutes.textContent = '0';
+      this.elSeconds.textContent = '0';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff -= days * (1000 * 60 * 60 * 24);
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    diff -= hours * (1000 * 60 * 60);
+
+    const minutes = Math.floor(diff / (1000 * 60));
+    diff -= minutes * (1000 * 60);
+
+    const seconds = Math.floor(diff / 1000);
+
+    this.elDays.textContent = days;
+    this.elHours.textContent = hours;
+    this.elMinutes.textContent = minutes;
+    this.elSeconds.textContent = seconds;
+  }
+};
+
+CountdownManager.start();
