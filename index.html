@@ -49,6 +49,121 @@
     background-position: center;
   }
 
+  /* ---------- Countdown (siempre visible, en todas las pantallas) ---------- */
+
+  #countdown {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    text-align: center;
+    color: #e8f0ff;
+  }
+
+  #countdown-label {
+    font-size: 16px;
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px rgba(150,180,255,0.5);
+    margin-bottom: 6px;
+  }
+
+  #countdown-timer {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+  }
+
+  .cd-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cd-value {
+    font-size: 22px;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(150,180,255,0.6);
+  }
+
+  .cd-unit {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #aab4d0;
+    margin-top: 2px;
+  }
+
+  /* ---------- Sistema de pantallas ---------- */
+
+  .screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  .screen.active {
+    display: block;
+  }
+
+  /* ---------- Botón "volver" (casita) ---------- */
+
+  #back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    background: rgba(20,22,35,0.7);
+    border: 1px solid #445;
+    border-radius: 8px;
+    color: #e8f0ff;
+    font-size: 20px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  #back-btn.show {
+    display: flex;
+  }
+  #back-btn:hover { background: rgba(30,32,50,0.9); }
+
+  /* ---------- Pantalla 1: Menú ---------- */
+
+  #nav-buttons {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .nav-btn {
+    width: 260px;
+    height: 64px;
+    background: linear-gradient(180deg, #c0392b, #8e2318);
+    border: 3px solid #f5b8ac;
+    border-radius: 32px;
+    color: #ffffff;
+    font-family: 'm6x11plus', 'Courier New', monospace;
+    font-size: 22px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+  }
+  .nav-btn:hover { filter: brightness(1.08); }
+  .nav-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+
+  /* ---------- Pantalla 2: Inicio ---------- */
+
   #avatar-wrap {
     position: absolute;
     top: 50%;
@@ -89,52 +204,10 @@
     filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));
   }
 
-  #countdown {
-    position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-    text-align: center;
-    color: #e8f0ff;
-  }
-
-  #countdown-label {
-    font-size: 16px;
-    letter-spacing: 5px;
-    text-shadow: 0 0 10px rgba(150,180,255,0.5);
-    margin-bottom: 6px;
-  }
-
-  #countdown-timer {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-  }
-
-  .cd-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .cd-value {
-    font-size: 22px;
-    color: #ffffff;
-    text-shadow: 0 0 8px rgba(150,180,255,0.6);
-  }
-
-  .cd-unit {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: #aab4d0;
-    margin-top: 2px;
-  }
-
   #bubble {
     position: absolute;
-    top: 10px;
-    left: -46px;
+    top: 2px;
+    left: -28px;
     width: 56px;
     height: auto;
     opacity: 0;
@@ -147,11 +220,66 @@
     transform: translateY(0px) scale(1);
   }
 
+  /* ---------- Pantalla 3: Música ---------- */
+
+  #player-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(700px, 90vw);
+    height: min(394px, 51vw);
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 40px;
+  }
+
+  #player-panel-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  #player-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 1;
+  }
+
+  .player-btn {
+    width: 56px;
+    height: 56px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .player-btn img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .player-btn:hover { filter: brightness(1.1); }
+  .player-btn:active { filter: brightness(0.9); }
+
+  #btn-play-pause {
+    width: 68px;
+    height: 68px;
+  }
+
+  /* ---------- Botón de sonido de fondo (persistente) ---------- */
+
   #sound-btn {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    z-index: 5;
+    z-index: 10;
     background: transparent;
     border-style: solid;
     border-width: 14px 20px;
@@ -198,17 +326,48 @@
     </div>
   </div>
 
-  <img id="avion" src="assets/avion.png" alt="Avión pixel art">
+  <button id="back-btn" title="Volver al menú">🏠</button>
 
-  <div id="avatar-wrap">
-    <div id="avatar-box">
-      <img id="avatar" src="assets/avatar.png" alt="Avatar Paohan">
-      <img id="bubble" src="" alt="">
+  <!-- ===== Pantalla 1: Menú ===== -->
+  <div class="screen active" id="screen-menu">
+    <div id="nav-buttons">
+      <button class="nav-btn" data-target="inicio">Inicio</button>
+      <button class="nav-btn" data-target="musica">Música</button>
     </div>
-    <div id="title">PAOLA Y HANDER</div>
   </div>
 
-  <button id="sound-btn">🔇 Love Me Again</button>
+  <!-- ===== Pantalla 2: Inicio ===== -->
+  <div class="screen" id="screen-inicio">
+    <img id="avion" src="assets/avion.png" alt="Avión pixel art">
+
+    <div id="avatar-wrap">
+      <div id="avatar-box">
+        <img id="avatar" src="assets/avatar.png" alt="Avatar Paohan">
+        <img id="bubble" src="" alt="">
+      </div>
+      <div id="title">PAOLA Y HANDER</div>
+    </div>
+  </div>
+
+  <!-- ===== Pantalla 3: Música ===== -->
+  <div class="screen" id="screen-musica">
+    <div id="player-panel">
+      <img id="player-panel-bg" src="assets/player/player-panel.png" alt="">
+      <div id="player-controls">
+        <button class="player-btn" id="btn-prev">
+          <img src="assets/player/btn-prev.png" alt="Anterior">
+        </button>
+        <button class="player-btn" id="btn-play-pause">
+          <img id="play-pause-icon" src="assets/player/btn-play.png" alt="Reproducir">
+        </button>
+        <button class="player-btn" id="btn-next">
+          <img src="assets/player/btn-next.png" alt="Siguiente">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button id="sound-btn">🔇 City of Stars</button>
 </div>
 
 <script src="script.js"></script>

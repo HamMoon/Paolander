@@ -42,7 +42,7 @@ const AudioManager = {
     this.audio.play()
       .then(() => {
         this.unlocked = true;
-        this.soundBtn.textContent = '🔊 Love Me Again';
+        this.soundBtn.textContent = '🔊 City of Stars';
       })
       .catch(() => {
         // Si el navegador lo bloquea igual, queda disponible el botón manual.
@@ -56,15 +56,33 @@ const AudioManager = {
       this.audio.play()
         .then(() => {
           this.unlocked = true;
-          this.soundBtn.textContent = '🔊 Love Me Again';
+          this.soundBtn.textContent = '🔊 City of Stars';
         })
         .catch(() => {
           this.soundBtn.textContent = '⚠ Toca de nuevo';
         });
     } else {
       this.audio.pause();
-      this.soundBtn.textContent = '🔇 Love Me Again';
+      this.soundBtn.textContent = '🔇 City of Stars';
     }
+  },
+
+  // Pausa silenciosa (usada al entrar a la sección Música,
+  // para que no se pise con el reproductor de canciones).
+  pauseForScreen() {
+    if (!this.audio || this.audio.paused) return;
+    this.audio.pause();
+    this.soundBtn.textContent = '🔇 City of Stars';
+  },
+
+  // Reanuda automáticamente al salir de la sección Música.
+  resumeForScreen() {
+    if (!this.audio || !this.unlocked) return; // solo si ya se había desbloqueado antes
+    this.audio.play()
+      .then(() => {
+        this.soundBtn.textContent = '🔊 City of Stars';
+      })
+      .catch(() => {});
   }
 };
 
@@ -158,3 +176,77 @@ const CountdownManager = {
 };
 
 CountdownManager.start();
+
+
+/* ---------- 4. SCREEN MANAGER (navegación entre pantallas) ----------
+   Controla 3 pantallas: menú (selección), inicio, música.
+   Al entrar a "música" pausa la música de fondo (City of Stars);
+   al salir, la reanuda automáticamente.
+------------------------------------------------------- */
+
+const ScreenManager = {
+  current: 'menu',
+  screens: {
+    menu: document.getElementById('screen-menu'),
+    inicio: document.getElementById('screen-inicio'),
+    musica: document.getElementById('screen-musica')
+  },
+  backBtn: document.getElementById('back-btn'),
+
+  init() {
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.goTo(btn.dataset.target));
+    });
+
+    this.backBtn.addEventListener('click', () => this.goTo('menu'));
+  },
+
+  goTo(screenName) {
+    if (!this.screens[screenName]) return;
+
+    // Salir de la pantalla actual
+    if (this.current === 'musica' && screenName !== 'musica') {
+      AudioManager.resumeForScreen();
+    }
+
+    // Entrar a la nueva pantalla
+    if (screenName === 'musica') {
+      AudioManager.pauseForScreen();
+    }
+
+    Object.values(this.screens).forEach(s => s.classList.remove('active'));
+    this.screens[screenName].classList.add('active');
+
+    this.backBtn.classList.toggle('show', screenName !== 'menu');
+
+    this.current = screenName;
+  }
+};
+
+ScreenManager.init();
+
+
+/* ---------- 5. MUSIC PLAYER (placeholder visual) ----------
+   Por ahora solo alterna el ícono play/pausa del reproductor
+   de la sección Música. La lógica real de reproducción se
+   conecta cuando se agreguen las canciones (Cloudflare R2).
+------------------------------------------------------- */
+
+const MusicPlayerUI = {
+  playing: false,
+  icon: document.getElementById('play-pause-icon'),
+  btn: document.getElementById('btn-play-pause'),
+
+  init() {
+    this.btn.addEventListener('click', () => this.toggle());
+  },
+
+  toggle() {
+    this.playing = !this.playing;
+    this.icon.src = this.playing
+      ? 'assets/player/btn-pause.png'
+      : 'assets/player/btn-play.png';
+  }
+};
+
+MusicPlayerUI.init();
