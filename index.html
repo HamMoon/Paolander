@@ -114,22 +114,24 @@
     top: 20px;
     left: 20px;
     z-index: 10;
-    width: 44px;
-    height: 44px;
-    background: rgba(20,22,35,0.7);
-    border: 1px solid #445;
-    border-radius: 8px;
-    color: #e8f0ff;
-    font-size: 20px;
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: none;
+    padding: 0;
     cursor: pointer;
     display: none;
-    align-items: center;
-    justify-content: center;
+  }
+  #back-btn img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(0,0,0,0.5));
   }
   #back-btn.show {
-    display: flex;
+    display: block;
   }
-  #back-btn:hover { background: rgba(30,32,50,0.9); }
+  #back-btn:hover { filter: brightness(1.15); }
 
   /* ---------- Pantalla 1: Menú ---------- */
 
@@ -148,19 +150,21 @@
   .nav-btn {
     width: 260px;
     height: 64px;
-    background: linear-gradient(180deg, #c0392b, #8e2318);
-    border: 3px solid #f5b8ac;
-    border-radius: 32px;
+    background: transparent;
+    border-style: solid;
+    border-image-source: url('assets/ui/nav-button.png');
+    border-image-slice: 20 fill;
+    border-image-width: 10px 14px;
+    border-image-repeat: stretch;
     color: #ffffff;
     font-family: 'm6x11plus', 'Courier New', monospace;
     font-size: 22px;
     letter-spacing: 2px;
     cursor: pointer;
     text-shadow: 0 2px 2px rgba(0,0,0,0.4);
-    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
   }
-  .nav-btn:hover { filter: brightness(1.08); }
-  .nav-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+  .nav-btn:hover { filter: brightness(1.1); }
+  .nav-btn:active { filter: brightness(0.9); }
 
   /* ---------- Pantalla 2: Inicio ---------- */
 
@@ -227,34 +231,113 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: min(700px, 90vw);
-    height: min(394px, 51vw);
+    width: min(440px, 92vw);
     z-index: 2;
+    border-style: solid;
+    border-image-source: url('assets/player/player-panel.png');
+    border-image-slice: 75 59 71 60 fill;
+    border-image-width: 26px 20px 24px 20px;
+    border-image-repeat: stretch;
+    padding: 26px 22px 22px;
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 40px;
+    flex-direction: column;
+    align-items: center;
   }
 
-  #player-panel-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
+  #track-cover-wrap {
+    width: 130px;
+    height: 130px;
+    border: 3px solid #6b1410;
+    box-shadow: 0 0 14px rgba(200,40,30,0.35);
+    overflow: hidden;
+    background: #1a0d10;
+    flex-shrink: 0;
+  }
+  #track-cover {
     width: 100%;
     height: 100%;
-    z-index: -1;
+    object-fit: cover;
+    image-rendering: auto; /* las portadas son fotos, no pixel art */
+  }
+
+  #track-info {
+    text-align: center;
+    color: #f3e6e6;
+    margin-top: 12px;
+    min-height: 54px;
+    max-width: 100%;
+  }
+  #track-title {
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 0 6px rgba(220,60,50,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 320px;
+  }
+  #track-artist {
+    font-size: 11px;
+    color: #d79a94;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+  #track-album {
+    font-size: 9px;
+    color: #9c6c68;
+    margin-top: 2px;
+    letter-spacing: 1px;
+  }
+
+  #progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .time-label {
+    font-size: 9px;
+    color: #c99490;
+    min-width: 28px;
+    text-align: center;
+  }
+  #progress-bar {
+    position: relative;
+    flex: 1;
+    height: 20px;
+    cursor: pointer;
+  }
+  #progress-bar img, #progress-fill-wrap img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  #progress-fill-wrap {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    width: 0%;
+    overflow: hidden;
+  }
+  #progress-fill-wrap img {
+    width: var(--bar-real-width, 300px);
+    max-width: none;
   }
 
   #player-controls {
     display: flex;
     align-items: center;
-    gap: 16px;
-    z-index: 1;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
   }
 
   .player-btn {
-    width: 56px;
-    height: 56px;
+    width: 42px;
+    height: 42px;
     background: transparent;
     border: none;
     padding: 0;
@@ -265,12 +348,123 @@
     height: 100%;
     display: block;
   }
-  .player-btn:hover { filter: brightness(1.1); }
+  .player-btn:hover { filter: brightness(1.15); }
   .player-btn:active { filter: brightness(0.9); }
+  .player-btn.active { filter: drop-shadow(0 0 6px rgba(255,120,100,0.9)); }
 
   #btn-play-pause {
-    width: 68px;
-    height: 68px;
+    width: 52px;
+    height: 52px;
+  }
+
+  #secondary-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+    width: 100%;
+  }
+
+  .player-btn.small {
+    width: 30px;
+    height: 30px;
+  }
+
+  #volume-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 140px;
+  }
+  #volume-bar {
+    position: relative;
+    flex: 1;
+    height: 14px;
+    cursor: pointer;
+  }
+  #volume-bar img, #volume-fill-wrap img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  #volume-fill-wrap {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+  }
+  #volume-fill-wrap img {
+    width: var(--vol-bar-real-width, 150px);
+    max-width: none;
+  }
+
+  /* ---------- Cajón de playlist ---------- */
+
+  #playlist-drawer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: min(440px, 92vw);
+    max-height: 70vh;
+    overflow-y: auto;
+    z-index: 6;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  #playlist-drawer.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .playlist-item {
+    position: relative;
+    height: 54px;
+    margin-bottom: 8px;
+    border-style: solid;
+    border-image-source: url('assets/player/playlist-item-bg.png');
+    border-image-slice: 28 20 25 20 fill;
+    border-image-width: 12px 10px 11px 10px;
+    border-image-repeat: stretch;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    cursor: pointer;
+    color: #f0dcdc;
+    font-size: 11px;
+    gap: 10px;
+  }
+  .playlist-item:hover { filter: brightness(1.15); }
+  .playlist-item.playing {
+    filter: drop-shadow(0 0 8px rgba(255,90,70,0.7));
+  }
+  .playlist-item-cover {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    background: #1a0d10;
+    object-fit: cover;
+  }
+  .playlist-item-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .playlist-item-title {
+    display: block;
+    color: #ffffff;
+  }
+  .playlist-item-artist {
+    display: block;
+    font-size: 9px;
+    color: #c99490;
+    margin-top: 2px;
   }
 
   /* ---------- Botón de sonido de fondo (persistente) ---------- */
@@ -326,7 +520,7 @@
     </div>
   </div>
 
-  <button id="back-btn" title="Volver al menú">🏠</button>
+  <button id="back-btn" title="Volver al menú"><img src="assets/ui/back-icon.png" alt="Volver"></button>
 
   <!-- ===== Pantalla 1: Menú ===== -->
   <div class="screen active" id="screen-menu">
@@ -352,24 +546,71 @@
   <!-- ===== Pantalla 3: Música ===== -->
   <div class="screen" id="screen-musica">
     <div id="player-panel">
-      <img id="player-panel-bg" src="assets/player/player-panel.png" alt="">
+      <div id="track-cover-wrap">
+        <img id="track-cover" src="" alt="Portada del álbum">
+      </div>
+
+      <div id="track-info">
+        <div id="track-title">Selecciona una canción</div>
+        <div id="track-artist"></div>
+        <div id="track-album"></div>
+      </div>
+
+      <div id="progress-wrap">
+        <span class="time-label" id="time-current">0:00</span>
+        <div id="progress-bar">
+          <img src="assets/player/progress-track.png" alt="">
+          <div id="progress-fill-wrap"><img src="assets/player/progress-fill.png" alt=""></div>
+        </div>
+        <span class="time-label" id="time-duration">0:00</span>
+      </div>
+
       <div id="player-controls">
-        <button class="player-btn" id="btn-prev">
+        <button class="player-btn" id="btn-shuffle" title="Aleatorio">
+          <img id="shuffle-icon" src="assets/player/btn-aleatory.png" alt="Aleatorio">
+        </button>
+        <button class="player-btn" id="btn-prev" title="Anterior">
           <img src="assets/player/btn-prev.png" alt="Anterior">
         </button>
-        <button class="player-btn" id="btn-play-pause">
+        <button class="player-btn" id="btn-play-pause" title="Reproducir/Pausar">
           <img id="play-pause-icon" src="assets/player/btn-play.png" alt="Reproducir">
         </button>
-        <button class="player-btn" id="btn-next">
+        <button class="player-btn" id="btn-next" title="Siguiente">
           <img src="assets/player/btn-next.png" alt="Siguiente">
+        </button>
+        <button class="player-btn" id="btn-repeat" title="Repetir">
+          <img id="repeat-icon" src="assets/player/btn-repetition.png" alt="Repetir">
+        </button>
+      </div>
+
+      <div id="secondary-controls">
+        <button class="player-btn small" id="btn-stop" title="Detener">
+          <img src="assets/player/btn-stop.png" alt="Detener">
+        </button>
+        <div id="volume-wrap">
+          <button class="player-btn small" id="btn-mute" title="Silenciar">
+            <img id="volume-icon" src="assets/player/btn-volume-on.png" alt="Volumen">
+          </button>
+          <div id="volume-bar">
+            <img src="assets/player/volume-track.png" alt="">
+            <div id="volume-fill-wrap"><img src="assets/player/volume-fill.png" alt=""></div>
+          </div>
+        </div>
+        <button class="player-btn small" id="btn-playlist-toggle" title="Lista de canciones">
+          <img src="assets/player/btn-playlist.png" alt="Lista">
         </button>
       </div>
     </div>
+
+    <div id="playlist-drawer"></div>
   </div>
 
   <button id="sound-btn">🔇 City of Stars</button>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
